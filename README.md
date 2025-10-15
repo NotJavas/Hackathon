@@ -1,23 +1,46 @@
-# Project skeleton views
 
-This repository contains lightweight skeleton pages for the main views used in the project. They are intentionally minimal so you can expand them.
 
-Files added:
+La Misión
 
-- `LandingPage/index.html` — simple landing page skeleton.
-- `CoordinatorPanel/index.html` — coordinator dashboard stub.
-- `TeacherPanel/index.html` — wrapper that links to the existing `eduapp.html` demo (keeps original file intact).
-- `SideBar/index.html` — standalone sidebar stub.
-- `TopBar/index.html` — standalone topbar stub.
-- `Styles/styles.css` — shared minimal stylesheet.
-- `APIHandler/api.js` — minimal API handler placeholder.
+Nexus Académico es una plataforma de inteligencia y sincronización de carga académica diseñada para atacar la raíz del burnout estudiantil. En lugar de darle al alumno otra app para gestionar el estrés, le damos a la institución una herramienta para dejar de crearlo en primer lugar.
 
-How to open:
+Este proyecto es nuestro prototipo funcional desarrollado para el Hackathon, enfocado en demostrar la viabilidad y el impacto de un sistema coordinado.
 
-Open any `index.html` in your browser. Example: open `LandingPage/index.html`.
+El Problema Real
 
-Next steps:
+Los profesores asignan tareas a ciegas, sin conocer la carga que sus alumnos ya soportan por parte de otras materias. El resultado es una sobrecarga académica no intencionada, concentrada en semanas específicas, que lleva a los estudiantes a un estado de carga mental limítrofe.
 
-- Wire components together into a single SPA or template engine.
-- Replace placeholder content with project-specific components.
-- Hook `APIHandler/api.js` to your backend endpoints.
+La Solución: Inteligencia sobre Esfuerzo
+
+Nexus Académico se conecta a los sistemas existentes para crear un ecosistema de planificación consciente. La plataforma analiza la carga académica de forma objetiva y la presenta en dashboards intuitivos para que profesores y coordinadores puedan tomar decisiones informadas, coordinadas y empáticas.
+
+Funcionalidades Clave del Prototipo
+
+Panel de Profesor (TeacherPanel): ¡La joya de la corona! Una interfaz interactiva donde el profesor puede simular la asignación de una nueva tarea. Antes de publicarla, visualiza el impacto que tendrá en la carga semanal de sus alumnos, recibe alertas de riesgo de burnout y obtiene sugerencias para optimizar las fechas de entrega. Es una herramienta predictiva, no reactiva.
+
+Panel de Coordinador (CoordinatorPanel): Una vista macro para directores de carrera. Permite identificar patrones de sobrecarga a lo largo del semestre, detectar "cuellos de botella" y reestructurar los planes de estudio de forma estratégica y basada en datos.
+
+API Handler (APIHandler): El cerebro detrás de la simulación. Este módulo contiene la lógica para calcular la Puntuación de Carga Académica (PCA), procesando las tareas y generando las alertas.
+
+Componentes de UI (Bars, SideBar, TopBar): Módulos reutilizables que construyen una interfaz de usuario limpia, moderna y fácil de navegar.
+
+Estructura del Proyecto
+
+El proyecto está organizado de manera modular para facilitar su mantenimiento y escalabilidad.
+
+HACKATHON/
+├── APIHandler/
+│   └── api.js              # Lógica de cálculo de carga y simulación.
+├── Bars/
+│   ├── SideBar/            # (Futuro) Componente de barra lateral.
+│   └── TopBar/             # Componente de barra de navegación superior.
+├── landingPage/
+│   └── index.html          # Página de presentación del proyecto.
+├── Panels/
+│   ├── CoordinatorPanel/
+│   │   └── CoordinatorPanel.html # Dashboard para coordinadores.
+│   └── TeacherPanel/
+│       └── TeacherPanel.html   # Dashboard interactivo para profesores.
+├── Styles/
+│   └── styles.css          # Hoja de estilos principal.
+└── README.md               # Este increíble archivo.
