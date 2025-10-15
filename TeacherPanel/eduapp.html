@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulación de Nexus Académico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* bg-gray-900 */
+        }
+        .chart-bar {
+            transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+        }
+        .card {
+            background-color: #1F2937; /* bg-gray-800 */
+            border: 1px solid #374151; /* border-gray-700 */
+            border-radius: 0.75rem; /* rounded-xl */
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #374151;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="text-gray-200 p-4 sm:p-6 md:p-8">
+
+    <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <div class="flex items-center justify-center gap-3 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-indigo-400"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path><path d="m13 17-6-5 6-5"></path></svg>
+                <h1 class="text-3xl md:text-4xl font-bold text-white">Nexus Académico</h1>
+            </div>
+            <p class="text-lg text-gray-400">Plataforma de Sincronización de Carga Académica</p>
+        </header>
+
+        <!-- Main Dashboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+            <!-- Left Column: Professor's Control Panel -->
+            <div class="lg:col-span-2 card p-6 shadow-lg">
+                <h2 class="text-xl font-semibold mb-1 text-white">Panel del Profesor</h2>
+                <p class="text-gray-400 mb-6">Simula la asignación de una nueva tarea para ver su impacto.</p>
+                
+                <form id="task-form" class="space-y-4">
+                    <div>
+                        <label for="course" class="block text-sm font-medium text-gray-300">Materia</label>
+                        <select id="course" name="course" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                            <option>Cálculo Vectorial</option>
+                            <option>Programación Orientada a Objetos</option>
+                            <option>Física de Ondas</option>
+                            <option>Estructura de Datos</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="task-name" class="block text-sm font-medium text-gray-300">Nombre de la Tarea</label>
+                        <input type="text" id="task-name" name="task-name" value="Proyecto Final" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                    </div>
+
+                    <div>
+                        <label for="task-type" class="block text-sm font-medium text-gray-300">Tipo de Tarea</label>
+                        <select id="task-type" name="task-type" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white">
+                            <option value="5">Tarea Simple (Costo: 5 pts)</option>
+                            <option value="10">Ensayo (Costo: 10 pts)</option>
+                            <option value="15">Proyecto de Etapa (Costo: 15 pts)</option>
+                            <option value="25">Examen Parcial (Costo: 25 pts)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="due-date" class="block text-sm font-medium text-gray-300">Fecha de Entrega</label>
+                        <input type="date" id="due-date" name="due-date" class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white" required>
+                    </div>
+
+                    <div class="pt-2">
+                         <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900 transition-colors">
+                            Analizar Carga Antes de Asignar
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Nexus Analysis -->
+            <div class="lg:col-span-3 card p-6 shadow-lg">
+                <h2 class="text-xl font-semibold mb-2 text-white">Análisis de Nexus</h2>
+                <p class="text-gray-400 mb-6">Visualización de la carga académica proyectada para el grupo.</p>
+
+                <!-- Chart Area -->
+                <div class="mb-6">
+                    <h3 class="text-lg font-medium text-gray-300 mb-4">Carga Académica Semanal (PCA)</h3>
+                    <div class="w-full h-64 bg-gray-900/50 p-4 rounded-lg flex items-end justify-around gap-2" id="chart-container">
+                        <!-- Bars will be generated by JS -->
+                    </div>
+                    <div class="flex justify-center gap-4 mt-4 text-xs text-gray-400">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-teal-500"></span>Óptimo</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-yellow-500"></span>Elevado</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500"></span>Crítico</span>
+                    </div>
+                </div>
+
+                <!-- Alert/Feedback Box -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-300 mb-2">Diagnóstico y Sugerencias</h3>
+                    <div id="feedback-box" class="p-4 rounded-lg min-h-[120px] transition-colors border border-gray-700">
+                        <p class="text-gray-500">Selecciona una tarea y fecha para analizar el impacto en la carga estudiantil...</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <footer class="text-center mt-8 text-sm text-gray-500">
+            <p>&copy; 2025 Nexus Académico. Redefiniendo la planificación educativa para un futuro sostenible.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('task-form');
+            const dueDateInput = document.getElementById('due-date');
+            const chartContainer = document.getElementById('chart-container');
+            const feedbackBox = document.getElementById('feedback-box');
+
+            const MAX_LOAD = 60; // Max value for chart height
+
+            // --- Initial State: Pre-existing academic load ---
+            // Key: Start date of the week (Monday)
+            let academicLoad = {
+                '2025-10-27': { base: 20, tasks: ["Tarea de Cálculo (5)", "Lectura de Física (15)"] }, // Semana actual
+                '2025-11-03': { base: 35, tasks: ["Ensayo Estructura de Datos (10)", "Examen Rápido Cálculo (10)", "Avance POO (15)"] },
+                '2025-11-10': { base: 45, tasks: ["Entrega Parcial POO (15)", "Examen Parcial Cálculo (25)", "Tarea Física (5)"] },
+                '2025-11-17': { base: 15, tasks: ["Tarea simple POO (5)", "Lecturas (10)"] },
+                '2025-11-24': { base: 5, tasks: ["Tarea Física (5)"] },
+                '2025-12-01': { base: 50, tasks: ["Proyecto Final Física (25)", "Proyecto Final POO (25)"] },
+            };
+
+            // --- Utility Functions ---
+            function getStartOfWeek(date) {
+                const d = new Date(date);
+                d.setUTCHours(0, 0, 0, 0); // Use UTC to avoid timezone shifts
+                const day = d.getUTCDay();
+                const diff = d.getUTCDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
+                return new Date(d.setUTCDate(diff)).toISOString().split('T')[0];
+            }
+
+            function getWeekLabel(startDate) {
+                const start = new Date(startDate + 'T00:00:00Z');
+                const end = new Date(start);
+                end.setUTCDate(start.getUTCDate() + 6);
+                const startDay = start.getUTCDate();
+                const startMonth = start.toLocaleString('es-MX', { month: 'short', timeZone: 'UTC' });
+                const endDay = end.getUTCDate();
+                const endMonth = end.toLocaleString('es-MX', { month: 'short', timeZone: 'UTC' });
+                return `${startDay} ${startMonth} - ${endDay} ${endMonth}`;
+            }
+
+            function getLoadColor(load) {
+                if (load >= 45) return 'bg-red-500'; // Critical
+                if (load >= 30) return 'bg-yellow-500'; // Elevated
+                return 'bg-teal-500'; // Optimal
+            }
+
+            // --- Core Functions ---
+            function renderChart(highlightWeek = null) {
+                chartContainer.innerHTML = '';
+                Object.keys(academicLoad).sort().forEach(weekStart => {
+                    const loadData = academicLoad[weekStart];
+                    const load = loadData.base;
+                    const heightPercentage = (load / MAX_LOAD) * 100;
+                    
+                    const barContainer = document.createElement('div');
+                    barContainer.className = 'flex flex-col h-full items-center justify-end w-full tooltip';
+
+                    const tooltipText = document.createElement('span');
+                    tooltipText.className = 'tooltip-text';
+                    tooltipText.innerHTML = `<strong>Carga: ${load} pts</strong><br>${loadData.tasks.join('<br>')}`;
+
+                    const bar = document.createElement('div');
+                    bar.className = `chart-bar w-10/12 md:w-8/12 rounded-t-md ${getLoadColor(load)}`;
+                    bar.style.height = `${heightPercentage}%`;
+                    
+                    if(highlightWeek === weekStart) {
+                         bar.classList.add('ring-2', 'ring-offset-2', 'ring-indigo-400', 'ring-offset-gray-900/50');
+                    }
+
+                    const label = document.createElement('p');
+                    label.className = 'text-xs text-center mt-2 text-gray-400';
+                    const date = new Date(weekStart + 'T00:00:00Z');
+                    label.textContent = `${date.getUTCDate()} ${date.toLocaleString('es-MX', { month: 'short', timeZone: 'UTC' })}`;
+
+                    barContainer.appendChild(tooltipText);
+                    barContainer.appendChild(bar);
+                    barContainer.appendChild(label);
+                    chartContainer.appendChild(barContainer);
+                });
+            }
+
+            function analyzeAndFeedback(weekStart, newLoadValue, taskName) {
+                const existingLoad = academicLoad[weekStart] ? academicLoad[weekStart].base : 0;
+                const newTotalLoad = existingLoad + newLoadValue;
+
+                // Update feedback box
+                let feedbackHTML = '';
+                let bgColor = '';
+                let borderColor = '';
+                
+                if (newTotalLoad >= 45) {
+                    bgColor = 'bg-red-900/50';
+                    borderColor = 'border-red-500';
+                    feedbackHTML = `
+                        <h4 class="font-bold text-red-400">ALERTA DE CARGA CRÍTICA</h4>
+                        <p class="text-red-300 mt-1">Asignar "${taskName}" en esta fecha elevará la carga semanal a <strong>${newTotalLoad} puntos</strong>, superando el umbral de riesgo de burnout.</p>
+                        <p class="text-gray-400 mt-2 text-sm"><strong>Sugerencia de Nexus:</strong> Considere mover la entrega a una semana con carga inferior a 30 puntos (ej. la semana del ${Object.keys(academicLoad).find(w => academicLoad[w].base < 30).split('-')[2]} de ${new Date(Object.keys(academicLoad).find(w => academicLoad[w].base < 30)+'T00:00:00Z').toLocaleString('es-MX', {month: 'long', timeZone:'UTC'})}).</p>`;
+                } else if (newTotalLoad >= 30) {
+                    bgColor = 'bg-yellow-900/50';
+                    borderColor = 'border-yellow-500';
+                    feedbackHTML = `
+                        <h4 class="font-bold text-yellow-400">ADVERTENCIA: CARGA ELEVADA</h4>
+                        <p class="text-yellow-300 mt-1">La carga semanal alcanzará <strong>${newTotalLoad} puntos</strong>. Los estudiantes podrían experimentar altos niveles de estrés.</p>
+                        <p class="text-gray-400 mt-2 text-sm">Es posible asignar, pero se recomienda monitorear el progreso del grupo.</p>`;
+                } else {
+                    bgColor = 'bg-teal-900/50';
+                    borderColor = 'border-teal-500';
+                    feedbackHTML = `
+                        <h4 class="font-bold text-teal-400">CARGA ÓPTIMA</h4>
+                        <p class="text-teal-300 mt-1">La carga proyectada es de <strong>${newTotalLoad} puntos</strong>, un nivel manejable y seguro para la asignación.</p>
+                        <p class="text-gray-400 mt-2 text-sm">Adelante. Es un buen momento para esta tarea.</p>`;
+                }
+
+                feedbackBox.innerHTML = feedbackHTML;
+                feedbackBox.className = `p-4 rounded-lg min-h-[120px] transition-colors border ${bgColor} ${borderColor}`;
+
+                // Temporarily update chart for visualization
+                const originalLoad = academicLoad[weekStart] ? academicLoad[weekStart].base : 0;
+                if(academicLoad[weekStart]) {
+                    academicLoad[weekStart].base = newTotalLoad;
+                } else {
+                    // Create a temporary entry for the chart if the week doesn't exist
+                    academicLoad[weekStart] = { base: newTotalLoad, tasks: ["(Nueva tarea simulada)"] };
+                }
+                
+                renderChart(weekStart);
+
+                // Revert after a delay so the original state is preserved for next analysis
+                setTimeout(() => {
+                    if (originalLoad > 0) {
+                        academicLoad[weekStart].base = originalLoad;
+                    } else {
+                        delete academicLoad[weekStart]; // Clean up temp entry
+                    }
+                    // renderChart(); // Optionally re-render to revert visual change
+                }, 5000); // Reverts data after 5s, but keeps the visual change until next submission
+            }
+
+            // --- Event Listeners ---
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const taskType = document.getElementById('task-type');
+                const taskName = document.getElementById('task-name').value;
+                const newLoadValue = parseInt(taskType.value, 10);
+                const dueDate = dueDateInput.value;
+
+                if (!dueDate) {
+                    feedbackBox.innerHTML = `<p class="text-yellow-400">Por favor, selecciona una fecha de entrega para continuar.</p>`;
+                    feedbackBox.className = 'p-4 rounded-lg min-h-[120px] transition-colors border bg-yellow-900/50 border-yellow-500';
+                    return;
+                }
+
+                const weekStart = getStartOfWeek(dueDate);
+                analyzeAndFeedback(weekStart, newLoadValue, taskName);
+            });
+
+            // Set default date to a relevant one for the demo
+            dueDateInput.value = '2025-11-12';
+            
+            // --- Initial Render ---
+            renderChart();
+        });
+    </script>
+</body>
+</html>
