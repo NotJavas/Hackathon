@@ -28,19 +28,3 @@ Estructura del Proyecto
 
 El proyecto está organizado de manera modular para facilitar su mantenimiento y escalabilidad.
 
-HACKATHON/
-├── APIHandler/
-│   └── api.js              # Lógica de cálculo de carga y simulación.
-├── Bars/
-│   ├── SideBar/            # (Futuro) Componente de barra lateral.
-│   └── TopBar/             # Componente de barra de navegación superior.
-├── landingPage/
-│   └── index.html          # Página de presentación del proyecto.
-├── Panels/
-│   ├── CoordinatorPanel/
-│   │   └── CoordinatorPanel.html # Dashboard para coordinadores.
-│   └── TeacherPanel/
-│       └── TeacherPanel.html   # Dashboard interactivo para profesores.
-├── Styles/
-│   └── styles.css          # Hoja de estilos principal.
-└── README.md               # Este increíble archivo.
