@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 
                 // Redirect to the main page after a short delay
                 setTimeout(() => {
-                    window.location.href = './CoordinatorPanel.html';
+                    window.location.href = './landing.html';
                 }, 1500);
             });
         });

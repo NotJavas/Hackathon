@@ -28,3 +28,32 @@ Estructura del Proyecto
 
 El proyecto está organizado de manera modular para facilitar su mantenimiento y escalabilidad.
 
+¡Claro\! Basado en los archivos que has subido, he actualizado la estructura de tu proyecto para que refleje con precisión cómo están organizados los directorios y archivos.
+
+Aquí tienes la versión corregida y detallada:
+
+```
+/
+├── public/
+│   ├── css/
+│   │   ├── login.css         # Estilos para la página de login.
+│   │   └── styles.css        # Estilos globales para los paneles.
+│   └── js/
+│       ├── login.js          # Lógica para el formulario de login/registro.
+│       └── main.js           # Lógica principal para gráficos y carga académica.
+├── src/
+│   ├── components/
+│   │   ├── SideBar.html      # Componente de la barra lateral de navegación.
+│   │   ├── TopBar.html       # Componente de la barra superior.
+│   │   └── template.html     # (No utilizado) Plantilla base de HTML.
+│   ├── pages/
+│   │   ├── CoordinatorPanel.html # Vista para el coordinador.
+│   │   ├── TeacherPanel.html # Vista para el profesor.
+│   │   ├── landing.html      # Contenedor principal con la navegación y el iframe.
+│   │   └── login.html        # Página de inicio de sesión.
+│   └── services/
+│       └── api.js            # Lógica de API (simulada).
+├── index.html                # Redirige automáticamente a la página de login.
+└── README.md                 # La documentación de tu proyecto.
+
+```
