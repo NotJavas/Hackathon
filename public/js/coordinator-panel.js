@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initializeCoordinatorPanel() {
         const academicLoad = getSharedAcademicLoad();
-        renderChart(academicLoad);
+        renderCalendar(academicLoad, currentDisplayDate);
 
         feedbackBox.innerHTML = `
             <h4 class="font-bold text-teal-400">Vista General</h4>
@@ -26,4 +26,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('storage', () => initializeCoordinatorPanel());
 
     initializeCoordinatorPanel();
+    setupCalendarNavigation();
 });

@@ -60,42 +60,91 @@ function getLoadColorDetails(load) {
     return { text: 'text-teal-300', bg: 'bg-teal-900/50', border: 'border-teal-700' }; // Optimal
 }
 
-// --- Core Chart Rendering Function ---
-function renderChart(academicLoad, highlightWeek = null) {
+// --- State for Calendar Navigation ---
+let currentDisplayDate = new Date('2025-11-01T12:00:00Z');
+
+// --- Core Calendar Rendering Function ---
+function renderCalendar(academicLoad, targetDate, highlightWeek = null) {
     const chartContainer = document.getElementById('chart-container');
+    const calendarTitle = document.getElementById('calendar-title');
     if (!chartContainer) return;
 
+    // Update title
+    if(calendarTitle) {
+        calendarTitle.textContent = targetDate.toLocaleString('es-MX', { month: 'long', year: 'numeric', timeZone: 'UTC' }).replace(/^\w/, c => c.toUpperCase());
+    }
+
     chartContainer.innerHTML = '';
-    Object.keys(academicLoad).sort().forEach(weekStart => {
-        const loadData = academicLoad[weekStart];
-        const load = loadData.base;
-        const heightPercentage = (load / MAX_LOAD) * 100;
-        
-        const barContainer = document.createElement('div');
-        barContainer.className = 'flex flex-col h-full items-center justify-end w-full tooltip';
+    chartContainer.className = 'w-full bg-gray-900/50 p-4 rounded-lg grid grid-cols-7 gap-1 text-center text-xs';
 
-        const tooltipText = document.createElement('span');
-        tooltipText.className = 'tooltip-text';
-        // Mapea los objetos de tarea a texto para el tooltip
-        const taskDetails = loadData.tasks.map(task => task.text).join('<br>');
-        tooltipText.innerHTML = `<strong>Carga: ${load} pts</strong><br>${taskDetails}`;
+    // Add day headers
+    const days = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+    days.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'font-bold text-gray-400';
+        dayHeader.textContent = day;
+        chartContainer.appendChild(dayHeader);
+    });
 
-        const bar = document.createElement('div');
-        bar.className = `chart-bar w-10/12 md:w-8/12 rounded-t-md ${getLoadColor(load)}`;
-        bar.style.height = `${heightPercentage}%`;
-        
-        if(highlightWeek === weekStart) {
-             bar.classList.add('ring-2', 'ring-offset-2', 'ring-indigo-400', 'ring-offset-gray-900/50');
+    const year = targetDate.getUTCFullYear();
+    const month = targetDate.getUTCMonth();
+    const firstDayOfMonth = new Date(Date.UTC(year, month, 1));
+    const lastDayOfMonth = new Date(Date.UTC(year, month + 1, 0));
+    
+    // Day of week (0=Sun, 1=Mon, ...). Adjust to make Monday the start.
+    let startingDay = firstDayOfMonth.getUTCDay();
+    if (startingDay === 0) startingDay = 7; // Sunday is 7
+    startingDay -= 1; // Monday is 0
+
+    // Add blank days for the first week
+    for (let i = 0; i < startingDay; i++) {
+        chartContainer.appendChild(document.createElement('div'));
+    }
+
+    // Add days of the month
+    for (let i = 1; i <= lastDayOfMonth.getUTCDate(); i++) {
+        const dayCell = document.createElement('div');
+        const currentDate = new Date(Date.UTC(year, month, i));
+        const weekStart = getStartOfWeek(currentDate);
+        const weekData = academicLoad[weekStart];
+
+        dayCell.className = 'h-12 flex items-center justify-center rounded-md bg-gray-800/50 border border-transparent tooltip';
+        dayCell.textContent = i;
+
+        if (weekData) {
+            const load = weekData.base;
+            dayCell.classList.add(getLoadColor(load));
+            dayCell.classList.remove('bg-gray-800/50');
+
+            const tooltipText = document.createElement('span');
+            tooltipText.className = 'tooltip-text';
+            const taskDetails = weekData.tasks.map(task => task.text).join('<br>');
+            tooltipText.innerHTML = `<strong>Semana del ${getWeekLabel(weekStart)}</strong><br>Carga: ${load} pts<br>${taskDetails || 'Sin tareas detalladas.'}`;
+            dayCell.appendChild(tooltipText);
         }
 
-        const label = document.createElement('p');
-        label.className = 'text-xs text-center mt-2 text-gray-400';
-        const date = new Date(weekStart + 'T00:00:00Z');
-        label.textContent = `${date.getUTCDate()} ${date.toLocaleString('es-MX', { month: 'short', timeZone: 'UTC' })}`;
+        if (highlightWeek === weekStart) {
+            dayCell.classList.add('ring-2', 'ring-offset-2', 'ring-indigo-400', 'ring-offset-gray-900/50');
+        }
 
-        barContainer.appendChild(tooltipText);
-        barContainer.appendChild(bar);
-        barContainer.appendChild(label);
-        chartContainer.appendChild(barContainer);
-    });
+        chartContainer.appendChild(dayCell);
+    }
+}
+
+function setupCalendarNavigation() {
+    const prevMonthBtn = document.getElementById('prev-month-btn');
+    const nextMonthBtn = document.getElementById('next-month-btn');
+
+    if (prevMonthBtn) {
+        prevMonthBtn.addEventListener('click', () => {
+            currentDisplayDate.setUTCMonth(currentDisplayDate.getUTCMonth() - 1);
+            renderCalendar(getSharedAcademicLoad(), currentDisplayDate);
+        });
+    }
+    if (nextMonthBtn) {
+        nextMonthBtn.addEventListener('click', () => {
+            currentDisplayDate.setUTCMonth(currentDisplayDate.getUTCMonth() + 1);
+            renderCalendar(getSharedAcademicLoad(), currentDisplayDate);
+        });
+    }
 }
