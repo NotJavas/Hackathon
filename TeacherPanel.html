@@ -1,435 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Simulación de Nexus Académico</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Profesor - Nexus Académico</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <style>
-      body {
-        font-family: "Inter", sans-serif;
-        background-color: #111827; /* bg-gray-900 */
-      }
-      .chart-bar {
-        transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
-      }
-      .card {
-        background-color: #1f2937; /* bg-gray-800 */
-        border: 1px solid #374151; /* border-gray-700 */
-        border-radius: 0.75rem; /* rounded-xl */
-      }
-      .tooltip {
-        position: relative;
-        display: inline-block;
-      }
-      .tooltip .tooltip-text {
-        visibility: hidden;
-        width: 200px;
-        background-color: #374151;
-        color: #fff;
-        text-align: center;
-        border-radius: 6px;
-        padding: 5px;
-        position: absolute;
-        z-index: 1;
-        bottom: 125%;
-        left: 50%;
-        margin-left: -100px;
-        opacity: 0;
-        transition: opacity 0.3s;
-      }
-      .tooltip:hover .tooltip-text {
-        visibility: visible;
-        opacity: 1;
-      }
-    </style>
-  </head>
-  <body class="text-gray-200 p-4 sm:p-6 md:p-8">
-    <div id="loading-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex flex-col items-center justify-center z-50 hidden">
-      <div class="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-24 w-24 mb-4"></div>
-      <h2 class="text-center text-white text-xl font-semibold">Sincronizando...</h2>
-      <p class="w-1/3 text-center text-white">Actualizando la carga académica en todos los perfiles. Por favor, espere.</p>
-    </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body class="bg-gray-900 text-gray-200 p-4 sm:p-6 md:p-8">
+
     <div class="max-w-7xl mx-auto">
-      <!-- Header -->
-      <header class="text-center mb-8">
-        <div class="flex items-center justify-center gap-3 mb-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="36"
-            height="36"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="text-indigo-400"
-          >
-            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
-            <path d="m13 17-6-5 6-5"></path>
-          </svg>
-          <h1 class="text-3xl md:text-4xl font-bold text-white">Nexus Académico</h1>
+        <!-- Header -->
+        <header class="mb-8">
+            <h1 class="text-3xl font-bold text-white">Panel del Profesor</h1>
+            <p class="text-lg text-gray-400">Analiza la carga académica promedio y simula el impacto de nuevas tareas.</p>
+        </header>
+
+        <!-- Main Dashboard -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+            <!-- Left Column: Controls -->
+            <div class="lg:col-span-2 card p-6 shadow-lg flex flex-col gap-6">
+                <!-- Course Selector -->
+                <div>
+                    <label for="course-select" class="block text-sm font-medium text-gray-300 mb-2">1. Seleccione un curso</label>
+                    <select id="course-select" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">Cargando cursos...</option>
+                    </select>
+                </div>
+
+                <!-- Hypothetical Task Form -->
+                <div>
+                    <h2 class="text-lg font-semibold text-white mb-2">2. Simular Nueva Tarea</h2>
+                    <p class="text-sm text-gray-400 mb-4">Analiza cómo una nueva asignación afectaría la carga semanal del grupo.</p>
+                    <form id="analysis-form" class="space-y-4">
+                        <div>
+                            <label for="task-type" class="block text-sm font-medium text-gray-300">Tipo de Tarea</label>
+                            <select id="task-type" name="task-type" class="mt-1 w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="tarea">Tarea (10 pts)</option>
+                                <option value="proyecto">Proyecto (20 pts)</option>
+                                <option value="examen">Examen (25 pts)</option>
+                                <option value="otro">Otro (8 pts)</option>
+                            </select>
+                        </div>
+                         <div>
+                            <label for="task-description" class="block text-sm font-medium text-gray-300">Descripción (Opcional)</label>
+                            <input type="text" id="task-description" name="task-description" placeholder="Ej: Ensayo sobre la colonia" class="mt-1 w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label for="task-due-date" class="block text-sm font-medium text-gray-300">Fecha de Entrega</p>
+                            <input type="date" id="task-due-date" name="task-due-date" class="mt-1 w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md transition-colors">
+                            Analizar Impacto
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Column: Analysis & Visualization -->
+            <div class="lg:col-span-3 card p-6 shadow-lg">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-white">Análisis de Carga Académica</h2>
+                    <span id="student-count-info" class="text-xs text-indigo-400 font-medium"></span>
+                </div>
+                <p class="text-gray-400 mb-6">Visualización de la carga académica promedio para los alumnos del curso.</p>
+
+                <!-- Calendar Area -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <button id="prev-month-btn" class="p-2 rounded-md hover:bg-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        <h3 id="calendar-title" class="text-lg font-medium text-gray-300 w-48 text-center capitalize"></h3>
+                        <button id="next-month-btn" class="p-2 rounded-md hover:bg-gray-700">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </button>
+                    </div>
+                    <div id="calendar-container" class="grid grid-cols-7 gap-1 text-center text-xs">
+                        <!-- Calendar will be generated by JS -->
+                    </div>
+                    <div class="flex justify-center gap-4 mt-4 text-xs text-gray-400">
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-teal-500"></span>Óptimo</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-yellow-500"></span>Elevado</span>
+                        <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500"></span>Crítico</span>
+                    </div>
+                </div>
+
+                <!-- Feedback Box -->
+                <div>
+                    <h3 class="text-lg font-medium text-gray-300 mb-2">Diagnóstico y Recomendaciones</h3>
+                    <div id="feedback-box" class="p-4 rounded-lg min-h-[100px] transition-colors bg-gray-800 border border-gray-700">
+                        <p class="text-gray-500">El análisis del impacto de su nueva tarea aparecerá aquí...</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
-        <p class="text-lg text-gray-400">Plataforma de Sincronización de Carga Académica</p>
-      </header>
-
-      <!-- Main Dashboard -->
-      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-        <!-- Left Column: Professor's Control Panel -->
-        <div class="lg:col-span-2 card p-6 shadow-lg">
-          <h2 class="text-xl font-semibold mb-1 text-white">Panel del Profesor</h2>
-          <p class="text-gray-400 mb-6">Simula la asignación de una nueva tarea para ver su impacto.</p>
-
-          <form id="task-form" class="space-y-4">
-            <div>
-              <label for="course" class="block text-sm font-medium text-gray-300">Materia</label>
-              <select
-                id="course"
-                name="course"
-                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white"
-              >
-                <option>Cargando cursos...</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="task-name" class="block text-sm font-medium text-gray-300">Nombre de la Tarea</label>
-              <input
-                type="text"
-                id="task-name"
-                name="task-name"
-                value="Examen Final"
-                title="Escribe el nombre de la tarea. Si el nombre empieza con 'examen', 'proyecto' o 'tarea', se le asignará una puntuación automática."
-                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white"
-              />
-            </div>
-
-            <div>
-              <label for="task-type" class="block text-sm font-medium text-gray-300">Tipo de Tarea</label>
-              <select
-                id="task-type"
-                name="task-type"
-                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white"
-                title="Selecciona el tipo de tarea para asignar la puntuación de carga automáticamente"
-              >
-                <option value="25">Examen (25 pts)</option>
-                <option value="20">Proyecto (20 pts)</option>
-                <option value="10">Tarea (10 pts)</option>
-                <option value="8">Otra (8 pts)</option>
-              </select>
-              <p class="text-xs text-gray-400 mt-1">La puntuación también se ajustará automáticamente si el nombre contiene “examen”, “proyecto” o “tarea”.</p>
-            </div>
-
-            <div>
-              <label for="due-date" class="block text-sm font-medium text-gray-300">Fecha de Entrega</label>
-              <input
-                type="date"
-                id="due-date"
-                name="due-date"
-                class="mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-white"
-                required
-              />
-            </div>
-
-            <div class="pt-2">
-              <button
-                type="submit"
-                class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-gray-900 transition-colors"
-              >
-                Analizar Carga Antes de Asignar
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Right Column: Nexus Analysis -->
-        <div class="lg:col-span-3 card p-6 shadow-lg">
-          <h2 class="text-xl font-semibold mb-2 text-white">Análisis de Nexus</h2>
-          <p class="text-gray-400 mb-6">Visualización de la carga académica proyectada para el grupo.</p>
-
-          <!-- Chart Area -->
-          <div class="mb-6">
-            <h3 class="text-lg font-medium text-gray-300 mb-4">Carga Académica Semanal (PCA)</h3>
-            <div id="chart-container">
-              <!-- Bars will be generated by JS -->
-            </div>
-            <div class="flex justify-center gap-4 mt-4 text-xs text-gray-400">
-              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-teal-500"></span>Óptimo</span>
-              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-yellow-500"></span>Elevado</span>
-              <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full bg-red-500"></span>Crítico</span>
-            </div>
-          </div>
-
-          <!-- Alert/Feedback Box -->
-          <div>
-            <h3 class="text-lg font-medium text-gray-300 mb-2">Diagnóstico y Sugerencias</h3>
-            <div id="feedback-box" class="p-4 rounded-lg min-h-[120px] transition-colors border border-gray-700">
-              <p class="text-gray-500">Selecciona una tarea y fecha para analizar el impacto en la carga estudiantil...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <footer class="text-center mt-8 text-sm text-gray-500">
-        <p>&copy; 2025 Nexus Académico. Redefiniendo la planificación educativa para un futuro sostenible.</p>
-      </footer>
     </div>
 
-    <script src="/js/main.js"></script>
-    <script src="/js/point-system.js"></script>
+    <script src="../js/teacher-panel.js"></script>
 
-    <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("task-form");
-        const dueDateInput = document.getElementById("due-date");
-        const feedbackBox = document.getElementById("feedback-box");
-        const courseSelect = document.getElementById("course");
-        const loadingOverlay = document.getElementById("loading-overlay");
-        const taskTypeSelect = document.getElementById("task-type");
-
-        let academicLoad = {};
-
-        function analyzeAndFeedback(weekStart, basePoints, taskName) {
-          const classAvg = academicLoad.__classAvgTaskPoints || 0;
-          // Ajustar el puntaje de la nueva tarea con el promedio de puntos de la clase (todas las asignaciones de sus alumnos)
-          const newLoadValue = Math.round((basePoints + (classAvg || basePoints)) / 2);
-
-          const existingLoad = academicLoad[weekStart] ? academicLoad[weekStart].base : 0;
-          const newTotalLoad = existingLoad + newLoadValue;
-
-          let feedbackHTML = "";
-          let { bg, border } = getLoadColorDetails(newTotalLoad);
-
-          if (newTotalLoad >= 45) {
-            const suggestionWeek = Object.keys(academicLoad).find((w) => academicLoad[w].base < 30);
-            let suggestionStr = "";
-            if (suggestionWeek) {
-              const suggestionDate = new Date(suggestionWeek + "T00:00:00Z");
-              suggestionStr = ` (ej. la semana del ${suggestionDate.getUTCDate()} de ${suggestionDate.toLocaleString("es-MX", { month: "long", timeZone: "UTC" })})`;
-            }
-            feedbackHTML = `
-              <h4 class="font-bold text-red-400">ALERTA DE CARGA CRÍTICA</h4>
-              <p class="text-red-300 mt-1">Asignar "${taskName}" elevará la carga semanal a <strong>${newTotalLoad} puntos</strong>.</p>
-              <p class="text-gray-400 mt-2 text-sm"><strong>Sugerencia:</strong> Mueva la entrega a una semana con carga &lt; 30 puntos${suggestionStr}.</p>
-              <div class="mt-3 text-sm text-gray-300">Puntuación estimada de la tarea: <strong>${newLoadValue} pts</strong> (tipo: ${basePoints} · promedio clase: ${classAvg || "N/A"})</div>`;
-          } else if (newTotalLoad >= 30) {
-            feedbackHTML = `
-              <h4 class="font-bold text-yellow-400">ADVERTENCIA: CARGA ELEVADA</h4>
-              <p class="text-yellow-300 mt-1">La carga semanal alcanzará <strong>${newTotalLoad} puntos</strong>.</p>
-              <p class="text-gray-400 mt-2 text-sm">Es posible asignar, pero se recomienda monitoreo cercano.</p>
-              <div class="mt-3 text-sm text-gray-300">Puntuación estimada de la tarea: <strong>${newLoadValue} pts</strong> (tipo: ${basePoints} · promedio clase: ${classAvg || "N/A"})</div>`;
-          } else {
-            feedbackHTML = `
-              <h4 class="font-bold text-teal-400">CARGA ÓPTIMA</h4>
-              <p class="text-teal-300 mt-1">La carga proyectada es de <strong>${newTotalLoad} puntos</strong>.</p>
-              <p class="text-gray-400 mt-2 text-sm">Buen momento para asignar.</p>
-              <div class="mt-3 text-sm text-gray-300">Puntuación estimada de la tarea: <strong>${newLoadValue} pts</strong> (tipo: ${basePoints} · promedio clase: ${classAvg || "N/A"})</div>`;
-          }
-
-          // Reemplaza por completo cualquier recomendación anterior
-          feedbackBox.innerHTML = feedbackHTML;
-          feedbackBox.className = `p-4 rounded-lg min-h-[120px] transition-colors border ${bg} ${border}`;
-
-          // Actualiza la carga y recalendario
-          if (academicLoad[weekStart]) {
-            academicLoad[weekStart].base = newTotalLoad;
-            academicLoad[weekStart].tasks.push({ text: `${taskName} (${newLoadValue})`, completed: false });
-          } else {
-            academicLoad[weekStart] = { base: newTotalLoad, tasks: [{ text: `${taskName} (${newLoadValue})`, completed: false }] };
-          }
-
-          setSharedAcademicLoad(academicLoad);
-          currentDisplayDate = new Date(dueDateInput.value + "T12:00:00Z");
-          renderCalendar(academicLoad, currentDisplayDate, weekStart);
-        }
-
-        function syncData(callback) {
-          // Mostrar overlay solo durante la operación simulada, evitar parpadeo
-          loadingOverlay.classList.remove("hidden");
-          try {
-            setTimeout(() => {
-              callback();
-              loadingOverlay.classList.add("hidden");
-            }, 300);
-          } catch (e) {
-            loadingOverlay.classList.add("hidden");
-          }
-        }
-
-        form.addEventListener("submit", (e) => {
-          e.preventDefault();
-
-          const taskNameInput = document.getElementById("task-name");
-          const taskName = taskNameInput.value;
-          const dueDate = dueDateInput.value;
-
-          if (!dueDate) {
-            feedbackBox.innerHTML = `<p class="text-yellow-400">Por favor, selecciona una fecha de entrega para continuar.</p>`;
-            feedbackBox.className = "p-4 rounded-lg min-h-[120px] transition-colors border bg-yellow-900/50 border-yellow-500";
-            return;
-          }
-
-          // Priorizar selección manual, pero si el nombre contiene palabras clave (examen, proyecto, tarea),
-          // adoptar esa puntuación automáticamente para alinear con point-system.
-          let basePoints = parseInt(taskTypeSelect.value, 10);
-          const autoPoints = getTaskPoints(taskName);
-          if ([25, 20, 10].includes(autoPoints) && autoPoints !== basePoints) {
-            basePoints = autoPoints;
-            taskTypeSelect.value = String(autoPoints);
-          }
-          const weekStart = getStartOfWeek(dueDate);
-
-          syncData(() => {
-            analyzeAndFeedback(weekStart, basePoints, taskName);
-          });
-        });
-
-        async function loadAndProcessWorkload(courseId) {
-          loadingOverlay.classList.remove("hidden");
-          try {
-            const response = await fetch(`http://localhost:3001/api/courses/${courseId}/student-workload`, { credentials: "include" });
-            if (!response.ok) {
-              throw new Error("Failed to fetch workload");
-            }
-            const workloadByStudent = await response.json();
-
-            const weeklyLoadPerStudent = {};
-            const allTasksByWeek = {};
-
-            for (const studentId in workloadByStudent) {
-              const tasks = workloadByStudent[studentId];
-              for (const task of tasks) {
-                if (task.fecha_entrega) {
-                  const parts = task.fecha_entrega.split("/");
-                  if (parts.length !== 3) continue;
-                  const date = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                  const weekStart = getStartOfWeek(date);
-                  const points = getTaskPoints(task.titulo);
-
-                  if (!weeklyLoadPerStudent[weekStart]) {
-                    weeklyLoadPerStudent[weekStart] = {};
-                  }
-                  if (!weeklyLoadPerStudent[weekStart][studentId]) {
-                    weeklyLoadPerStudent[weekStart][studentId] = 0;
-                  }
-                  weeklyLoadPerStudent[weekStart][studentId] += points;
-
-                  if (!allTasksByWeek[weekStart]) {
-                    allTasksByWeek[weekStart] = [];
-                  }
-                  if (!allTasksByWeek[weekStart].find((t) => t.text.startsWith(task.titulo))) {
-                    allTasksByWeek[weekStart].push({ text: `${task.titulo} (${points})`, completed: false });
-                  }
-                }
-              }
-            }
-
-            const finalAcademicLoad = {};
-            const numStudents = Object.keys(workloadByStudent).length;
-
-            for (const weekStart in weeklyLoadPerStudent) {
-              let totalWeeklyLoad = 0;
-              const studentLoads = Object.values(weeklyLoadPerStudent[weekStart]);
-              for (const load of studentLoads) {
-                totalWeeklyLoad += load;
-              }
-
-              const averageLoad = numStudents > 0 ? Math.round(totalWeeklyLoad / numStudents) : 0;
-
-              finalAcademicLoad[weekStart] = {
-                base: averageLoad,
-                tasks: allTasksByWeek[weekStart] || [],
-              };
-            }
-            // Obtener promedio global de puntos por tarea usando el endpoint del backend
-            try {
-              const flatResp = await fetch(`http://localhost:3001/api/courses/${courseId}/all-assignments`, { credentials: "include" });
-              if (flatResp.ok) {
-                const flatAssignments = await flatResp.json();
-                let totalPts = 0;
-                let totalCount = 0;
-                for (const a of flatAssignments) {
-                  const pts = getTaskPoints(a.titulo);
-                  totalPts += pts;
-                  totalCount += 1;
-                }
-                finalAcademicLoad.__classAvgTaskPoints = totalCount > 0 ? Math.round(totalPts / totalCount) : 0;
-              } else {
-                finalAcademicLoad.__classAvgTaskPoints = 0;
-              }
-            } catch (e) {
-              finalAcademicLoad.__classAvgTaskPoints = 0;
-            }
-            return finalAcademicLoad;
-          } catch (error) {
-            console.error("Error loading workload:", error);
-            feedbackBox.innerHTML = `<p class="text-red-400">Error al cargar los datos de carga académica. Es posible que el backend no esté disponible o que el curso no tenga alumnos.</p>`;
-            return {};
-          } finally {
-            loadingOverlay.classList.add("hidden");
-          }
-        }
-
-        async function populateCourses() {
-          try {
-            const response = await fetch("http://localhost:3001/api/teacher/courses", { credentials: "include" });
-            if (!response.ok) {
-              throw new Error("Failed to fetch courses");
-            }
-            const courses = await response.json();
-
-            courseSelect.innerHTML = ""; // Clear existing options
-            if (courses.length === 0) {
-              courseSelect.innerHTML = "<option>No hay cursos disponibles</option>";
-              return null;
-            }
-
-            courses.forEach((course) => {
-              const option = document.createElement("option");
-              option.value = course.id;
-              option.textContent = course.name;
-              courseSelect.appendChild(option);
-            });
-
-            return courses[0].id; // Return the ID of the first course
-          } catch (error) {
-            console.error("Error populating courses:", error);
-            feedbackBox.innerHTML = `<p class="text-red-400">Error al cargar la lista de cursos.</p>`;
-            courseSelect.innerHTML = "<option>Error al cargar</option>";
-            return null;
-          }
-        }
-
-        async function handleCourseChange() {
-          const courseId = courseSelect.value;
-          if (!courseId) return;
-
-          academicLoad = await loadAndProcessWorkload(courseId);
-          setSharedAcademicLoad(academicLoad);
-          renderCalendar(academicLoad, currentDisplayDate);
-        }
-
-        async function initializeTeacherPanel() {
-          const initialCourseId = await populateCourses();
-          if (initialCourseId) {
-            await handleCourseChange(); // Load data for the first course
-          }
-          courseSelect.addEventListener("change", handleCourseChange);
-        }
-
-        dueDateInput.value = "2025-11-12";
-
-        // Escuchar evento personalizado sin re-inicializar por completo para evitar parpadeo y loops
-        window.addEventListener("nexus:academicLoadUpdated", () => {
-          renderCalendar(getSharedAcademicLoad(), currentDisplayDate);
-        });
-
-        initializeTeacherPanel();
-        setupCalendarNavigation();
-      });
-    </script>
-  </body>
+</body>
 </html>
+
