@@ -6,7 +6,7 @@
  */
 function getTaskPoints(title) {
   if (!title) {
-    return 1; // Default for tasks without a title
+    return 8; // Default for tasks without a title
   }
 
   const lowerCaseTitle = title.toLowerCase();
