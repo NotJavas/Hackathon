@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - Nexus Académico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/css/login.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="toast-container" class="toast-container"></div>
+    <div class="min-h-screen bg-gray-950 flex items-center justify-center p-4">
+      <div class="w-full max-w-6xl grid md:grid-cols-2 gap-8 items-center">
+        <!-- Left side - Branding -->
+        <div class="hidden md:block space-y-6">
+          <div class="flex items-center gap-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-blue-500"
+            >
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+              <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" />
+              <path d="M12 12v10" />
+            </svg>
+            <h1 class="text-4xl font-bold text-gray-100">Nexus Académico</h1>
+          </div>
+          <p class="text-gray-400 text-xl">Tu plataforma todo-en-uno para gestionar clases, tareas y horarios académicos.</p>
+
+          <div class="space-y-4 pt-8">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-blue-400"
+                >
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-gray-200 mb-1">Aprendizaje Organizado</h3>
+                <p class="text-sm text-gray-400">Mantén un registro de todas tus clases, exámenes y tareas en un solo lugar.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-purple-400"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-gray-200 mb-1">Para Estudiantes y Profesores</h3>
+                <p class="text-sm text-gray-400">Perfecto tanto para estudiantes que gestionan sus tareas como para profesores que organizan sus clases.</p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="text-green-400"
+                >
+                  <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-gray-200 mb-1">Nunca te Pierdas una Fecha Límite</h3>
+                <p class="text-sm text-gray-400">Mantente al tanto de las tareas con recordatorios inteligentes y vistas de calendario.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right side - Google Only Login -->
+        <div class="bg-gray-900 border border-gray-800 rounded-lg">
+          <div class="p-6">
+            <h2 class="text-2xl font-bold text-gray-100">Inicia sesión con Google</h2>
+            <p class="text-gray-400">Usaremos tu cuenta de Google Classroom para sincronizar tus cursos y tareas.</p>
+          </div>
+          <div class="p-6 space-y-4">
+            <button id="google-login" class="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
+                <path
+                  fill="#FFC107"
+                  d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.156,7.961,3.039l5.657-5.657C33.107,6.053,28.805,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+                />
+                <path
+                  fill="#FF3D00"
+                  d="M6.306,14.691l6.571,4.818C14.655,16.108,19.001,13,24,13c3.059,0,5.842,1.156,7.961,3.039l5.657-5.657C33.107,6.053,28.805,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+                />
+                <path
+                  fill="#4CAF50"
+                  d="M24,44c4.717,0,9.017-1.805,12.289-4.747l-5.675-4.773C28.517,35.091,26.393,36,24,36c-5.202,0-9.619-3.326-11.273-7.965l-6.538,5.037C9.5,39.556,16.227,44,24,44z"
+                />
+                <path
+                  fill="#1976D2"
+                  d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.112,5.614c0.001-0.001,0.002-0.001,0.003-0.002l6.571,4.818C36.484,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+                />
+              </svg>
+              Continuar con Google
+            </button>
+            <div class="mt-2 p-4 bg-gray-800 border border-gray-700 rounded-lg text-sm text-gray-400">Al continuar, se abrirá la ventana de Google para autorizar el acceso a tus cursos y tareas.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/login.js"></script>
+  </body>
+</html>

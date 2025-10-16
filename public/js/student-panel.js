@@ -1,44 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const weeksListContainer = document.getElementById('weeks-list');
     const tasksListContainer = document.getElementById('tasks-list');
     const tasksViewTitle = document.querySelector('#tasks-view h2');
-    
-    const MAX_LOAD = 60; // Max value for chart height
-
-    // --- Initial State: Pre-existing academic load ---
-    // Key: Start date of the week (Monday)
-    let initialAcademicLoad = {
-        '2025-10-27': { base: 20, tasks: [{text: "Tarea de Cálculo (5)", completed: false}, {text: "Lectura de Física (15)", completed: false}] },
-        '2025-11-03': { base: 35, tasks: [{text: "Ensayo Estructura de Datos (10)", completed: false}, {text: "Examen Rápido Cálculo (10)", completed: false}, {text: "Avance POO (15)", completed: false}] },
-        '2025-11-10': { base: 45, tasks: [{text: "Entrega Parcial POO (15)", completed: false}, {text: "Examen Parcial Cálculo (25)", completed: false}, {text: "Tarea Física (5)", completed: false}] },
-        '2025-11-17': { base: 15, tasks: [{text: "Tarea simple POO (5)", completed: false}, {text: "Lecturas (10)", completed: false}] },
-        '2025-11-24': { base: 5, tasks: [{text: "Tarea Física (5)", completed: false}] },
-        '2025-12-01': { base: 50, tasks: [{text: "Proyecto Final Física (25)", completed: false}, {text: "Proyecto Final POO (25)", completed: false}] },
-    };
-
-    // --- Shared Data Functions ---
-    function getSharedAcademicLoad() {
-        const storedData = localStorage.getItem('academicLoad');
-        if (storedData) {
-            let data = JSON.parse(storedData);
-            // Convert task strings to objects if needed (for backward compatibility)
-            Object.keys(data).forEach(week => {
-                if (data[week].tasks.length > 0 && typeof data[week].tasks[0] === 'string') {
-                    data[week].tasks = data[week].tasks.map(taskText => ({ text: taskText, completed: false }));
-                }
-            });
-            return data;
-        }
-        localStorage.setItem('academicLoad', JSON.stringify(initialAcademicLoad));
-        return initialAcademicLoad;
-    }
-
-    function setSharedAcademicLoad(data) {
-        localStorage.setItem('academicLoad', JSON.stringify(data));
-    }
-
-    let academicLoad = getSharedAcademicLoad();
-
 
     // --- Utility Functions ---
     function getStartOfWeek(date) {
@@ -53,11 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const start = new Date(startDate + 'T00:00:00Z');
         const end = new Date(start);
         end.setUTCDate(start.getUTCDate() + 6);
-        const startDay = start.getUTCDate();
-        const startMonth = start.toLocaleString('es-MX', { month: 'short', timeZone: 'UTC' });
-        const endDay = end.getUTCDate();
-        const endMonth = end.toLocaleString('es-MX', { month: 'short', timeZone: 'UTC' });
-        return `${startDay} ${startMonth} - ${endDay} ${endMonth}`;
+
+        const options = { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' };
+        const startStr = start.toLocaleDateString('es-MX', options);
+        const endStr = end.toLocaleDateString('es-MX', options);
+
+        return `${startStr} - ${endStr}`;
     }
 
     function getLoadColor(load) {
@@ -66,7 +30,50 @@ document.addEventListener('DOMContentLoaded', () => {
         return { text: 'text-teal-300', bg: 'bg-teal-900/50', border: 'border-teal-700' }; // Optimal
     }
 
-    function renderTasks(weekStart) {
+    async function fetchAndProcessAssignments() {
+        try {
+            const response = await fetch('http://localhost:3001/api/assignments', { credentials: 'include' });
+            if (!response.ok) {
+                throw new Error('Failed to fetch assignments');
+            }
+            const assignments = await response.json();
+
+            const academicLoad = {};
+            const today = new Date();
+            const startOfCurrentWeek = getStartOfWeek(today);
+
+            assignments.forEach(assignment => {
+                if (!assignment.dueDate) return;
+                // dueDate is in "DD/MM/YYYY" format, convert to "YYYY-MM-DD"
+                const parts = assignment.dueDate.split('/');
+                const isoDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                const weekStart = getStartOfWeek(isoDate);
+
+                if (weekStart >= startOfCurrentWeek) {
+                    if (!academicLoad[weekStart]) {
+                        academicLoad[weekStart] = { base: 0, tasks: [] };
+                    }
+
+                    const points = getTaskPoints(assignment.name);
+                    academicLoad[weekStart].base += points;
+
+                    academicLoad[weekStart].tasks.push({
+                        text: `${assignment.name} (${assignment.courseName})`,
+                        completed: assignment.completed || false,
+                        points: points
+                    });
+                }
+            });
+
+            return academicLoad;
+        } catch (error) {
+            console.error('Error fetching assignments:', error);
+            weeksListContainer.innerHTML = '<p class="text-red-400">Error al cargar las tareas.</p>';
+            return {};
+        }
+    }
+
+    function renderTasks(weekStart, academicLoad) {
         const weekData = academicLoad[weekStart];
         const weekLabel = getWeekLabel(weekStart);
         tasksViewTitle.textContent = `Tareas para la semana del ${weekLabel}`;
@@ -76,26 +83,30 @@ document.addEventListener('DOMContentLoaded', () => {
             weekData.tasks.forEach((task, index) => {
                 const li = document.createElement('li');
                 li.className = `flex items-center justify-between bg-gray-900/50 p-3 rounded-md border border-gray-700 transition-all ${task.completed ? 'opacity-50' : ''}`;
-                
+
                 const label = document.createElement('label');
                 label.className = 'flex items-center gap-3 cursor-pointer';
-                
+
                 const checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
                 checkbox.checked = task.completed;
                 checkbox.className = 'h-5 w-5 rounded bg-gray-700 border-gray-600 text-indigo-600 focus:ring-indigo-500';
                 checkbox.onchange = () => {
                     academicLoad[weekStart].tasks[index].completed = checkbox.checked;
-                    setSharedAcademicLoad(academicLoad);
-                    renderTasks(weekStart); // Re-render to apply styles
+                    // Re-render to apply styles, no need to save to local storage anymore
+                    renderTasks(weekStart, academicLoad);
                 };
 
                 const span = document.createElement('span');
                 span.className = `text-gray-300 ${task.completed ? 'line-through' : ''}`;
                 span.textContent = task.text;
 
+                const pointsSpan = document.createElement('span');
+                pointsSpan.className = 'text-xs font-mono px-2 py-1 rounded bg-gray-700 text-gray-300';
+                pointsSpan.textContent = `${task.points} pts`;
+
                 label.append(checkbox, span);
-                li.appendChild(label);
+                li.append(label, pointsSpan);
                 tasksListContainer.appendChild(li);
             });
         } else {
@@ -103,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderWeeksList() {
+    function renderWeeksList(academicLoad) {
         weeksListContainer.innerHTML = '';
         Object.keys(academicLoad).sort().forEach(weekStart => {
             const weekData = academicLoad[weekStart];
@@ -123,26 +134,29 @@ document.addEventListener('DOMContentLoaded', () => {
             weekElement.addEventListener('click', () => {
                 document.querySelectorAll('#weeks-list > div').forEach(el => el.classList.remove('ring-2', 'ring-indigo-400'));
                 weekElement.classList.add('ring-2', 'ring-indigo-400');
-                renderTasks(weekStart);
+                renderTasks(weekStart, academicLoad);
             });
 
             weeksListContainer.appendChild(weekElement);
         });
     }
-    
-    // --- Initial Render ---
-    // Listen for changes from other tabs/windows
-    window.addEventListener('storage', (event) => {
-        if (event.key === 'academicLoad') {
-            academicLoad = getSharedAcademicLoad();
-            renderWeeksList();
+
+    async function initialize() {
+        const academicLoad = await fetchAndProcessAssignments();
+        renderWeeksList(academicLoad);
+
+        const firstWeek = Object.keys(academicLoad).sort()[0];
+        if (firstWeek) {
+            renderTasks(firstWeek, academicLoad);
+            const firstWeekElement = document.querySelector(`[data-week="${firstWeek}"]`);
+            if (firstWeekElement) {
+                firstWeekElement.classList.add('ring-2', 'ring-indigo-400');
+            }
+        } else {
+            tasksViewTitle.textContent = 'No hay tareas próximas';
+            tasksListContainer.innerHTML = '<li class="text-gray-500">Parece que no tienes tareas en el horizonte. ¡Buen trabajo!</li>';
         }
-    });
-    renderWeeksList();
-    // Opcional: Cargar las tareas de la primera semana por defecto
-    const firstWeek = Object.keys(academicLoad).sort()[0];
-    if (firstWeek) {
-        renderTasks(firstWeek);
-        document.querySelector(`[data-week="${firstWeek}"]`).classList.add('ring-2', 'ring-indigo-400');
     }
+
+    initialize();
 });

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Panel del Alumno - Nexus Académico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #111827; /* bg-gray-900 */
+      }
+      .chart-bar {
+        transition: height 0.5s ease-in-out, background-color 0.5s ease-in-out;
+      }
+      .card {
+        background-color: #1f2937; /* bg-gray-800 */
+        border: 1px solid #374151; /* border-gray-700 */
+        border-radius: 0.75rem; /* rounded-xl */
+      }
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+      .tooltip .tooltip-text {
+        visibility: hidden;
+        width: 200px;
+        background-color: #374151;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body class="text-gray-200 p-4 sm:p-6 md:p-8">
+    <div class="max-w-7xl mx-auto">
+      <!-- Header -->
+      <header class="text-center mb-8">
+        <div class="flex items-center justify-center gap-3 mb-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="36"
+            height="36"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-indigo-400"
+          >
+            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+            <path d="m13 17-6-5 6-5"></path>
+          </svg>
+          <h1 class="text-3xl md:text-4xl font-bold text-white">Nexus Académico</h1>
+        </div>
+        <p class="text-lg text-gray-400">Plataforma de Sincronización de Carga Académica</p>
+      </header>
+
+      <!-- Main Dashboard -->
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <!-- Left Column: Student's Info Panel -->
+        <div class="lg:col-span-2 card p-6 shadow-lg">
+          <h2 class="text-xl font-semibold mb-1 text-white">Panel del Alumno</h2>
+          <p class="text-gray-400 mb-6">Visualiza tu carga académica semanal y planifica tu tiempo.</p>
+          <div id="weeks-list" class="space-y-2">
+            <!-- Las semanas se generarán con JS -->
+            <p class="text-gray-500">Cargando semanas...</p>
+          </div>
+        </div>
+
+        <!-- Right Column: Nexus Analysis -->
+        <div class="lg:col-span-3 card p-6 shadow-lg">
+          <div id="tasks-view">
+            <h2 class="text-xl font-semibold mb-2 text-white">Detalle de Tareas</h2>
+            <p class="text-gray-400">Selecciona una semana del panel izquierdo para ver las tareas correspondientes.</p>
+            <ul id="tasks-list" class="mt-4 space-y-3"></ul>
+          </div>
+        </div>
+      </div>
+      <footer class="text-center mt-8 text-sm text-gray-500">
+        <p>&copy; 2025 Nexus Académico. Redefiniendo la planificación educativa para un futuro sostenible.</p>
+      </footer>
+    </div>
+
+    <script src="/js/point-system.js"></script>
+    <script src="/js/student-panel.js"></script>
+  </body>
+</html>

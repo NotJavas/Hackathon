@@ -1,4 +1,35 @@
+# Hackathon Frontend (Vite)
 
+Este proyecto es un frontend estático servido con Vite. Se integra con un backend Node (Google OAuth + Classroom) corriendo en `http://localhost:3001`.
+
+## Requisitos
+
+- Node.js 18+
+- Backend corriendo en `http://localhost:3001` con Google OAuth configurado (variables GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, APP_URL)
+
+## Scripts
+
+- `npm run dev` — Levanta Vite en `http://localhost:5173`
+- `npm run build` — Genera el build de producción en `dist/`
+- `npm run preview` — Previsualiza el build en `http://localhost:5173`
+
+## Estructura
+
+- `index.html` — redirige a `/login.html`
+- `src/pages/login.html` — Login solo con Google (redirige a `/auth/initiate` del backend)
+- `src/pages/landing.html` — Layout con iframe para paneles
+- `src/pages/StudentPanel.html` — Panel de alumno
+- `src/pages/TeacherPanel.html` — Panel de profesor
+- `public/` — recursos estáticos servidos desde `/` (por ejemplo `/js/main.js`, `/css/login.css`)
+
+## Notas de CORS/Sesión
+
+- El login usa cookies httpOnly. En el frontend se hace `fetch` con `{ credentials: 'include' }` contra `http://localhost:3001`.
+- Ajusta el CORS y `APP_URL` del backend si cambias puertos u origen.
+
+## Build multipágina
+
+La configuración de Vite incluye entradas múltiples para generar `login.html`, `landing.html`, `StudentPanel.html` y `TeacherPanel.html` directamente en `dist/`.
 
 La Misión
 

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nexus Académico</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #111827; /* bg-gray-900 */
+      }
+      #sidebar {
+        transition: transform 0.3s ease-in-out;
+      }
+      .sidebar-hidden {
+        transform: translateX(-100%);
+      }
+    </style>
+  </head>
+  <body class="flex h-screen overflow-hidden">
+    <!-- Sync Modal -->
+    <div id="sync-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50 hidden">
+      <div class="bg-gray-800 p-8 rounded-lg shadow-xl flex items-center gap-4">
+        <svg class="animate-spin h-8 w-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span class="text-white text-xl">Sincronizando datos...</span>
+      </div>
+    </div>
+
+    <aside id="sidebar" class="w-64 bg-gray-800 text-gray-200 flex flex-col p-4 border-r border-gray-700 fixed inset-y-0 left-0 z-30 md:relative md:translate-x-0 transform -translate-x-full">
+      <div>
+        <div class="flex items-center justify-between mb-6">
+          <div class="flex items-center gap-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-indigo-400"
+            >
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+              <path d="m13 17-6-5 6-5"></path>
+            </svg>
+            <h1 class="text-xl font-bold">Nexus Académico</h1>
+          </div>
+        </div>
+        <nav class="flex flex-col gap-2">
+          <a id="student-panel-link" href="./StudentPanel.html" target="content-frame" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+              <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" />
+              <path d="M12 12v10" />
+            </svg>
+            <span>Alumno</span>
+          </a>
+          <a id="teacher-panel-link" href="./TeacherPanel.html" target="content-frame" class="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-700 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z" />
+              <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10z" />
+              <path d="M12 12v10" />
+            </svg>
+            <span>Profesor</span>
+          </a>
+        </nav>
+      </div>
+      <div class="mt-auto">
+        <button id="logout-button" class="flex items-center gap-3 px-3 py-2 rounded-md bg-red-500 text-white hover:bg-red-600 transition-colors w-full">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          <span>Cerrar Sesión</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="flex-1 flex flex-col">
+      <header class="bg-gray-800/50 backdrop-blur-sm border-b border-gray-700/50 p-3 flex items-center justify-between md:justify-end">
+        <button id="sidebar-toggle" class="md:hidden p-2 rounded-md text-gray-300 hover:bg-gray-700">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <div class="flex items-center gap-4">
+          <span id="welcome-message" class="text-sm text-gray-400"></span>
+          <img id="user-avatar" src="" alt="Avatar" class="rounded-full w-8 h-8" />
+        </div>
+      </header>
+
+      <main class="flex-1 overflow-y-auto">
+        <iframe id="content-frame" name="content-frame" src="about:blank" class="w-full h-full border-0"></iframe>
+      </main>
+    </div>
+
+    <script src="/js/landing.js"></script>
+  </body>
+</html>
