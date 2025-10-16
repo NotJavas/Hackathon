@@ -55,12 +55,6 @@ Componentes de UI (Bars, SideBar, TopBar): Módulos reutilizables que construyen
 
 Estructura del Proyecto
 
-El proyecto está organizado de manera modular para facilitar su mantenimiento y escalabilidad.
-
-¡Claro\! Basado en los archivos que has subido, he actualizado la estructura de tu proyecto para que refleje con precisión cómo están organizados los directorios y archivos.
-
-Aquí tienes la versión corregida y detallada:
-
 ```
 /
 ├── public/
