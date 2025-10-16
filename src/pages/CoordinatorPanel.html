@@ -97,6 +97,14 @@
             const teacherFilter = document.getElementById('teacher-filter');
             const exportBtn = document.getElementById('export-btn');
 
+            // Override the global academicLoad with data from localStorage
+            function getSharedAcademicLoad() {
+                const storedData = localStorage.getItem('academicLoad');
+                if (storedData) {
+                    window.academicLoad = JSON.parse(storedData);
+                }
+            }
+
             function analyzeAndFeedback() {
                 const selectedGroup = groupFilter.value;
                 const selectedTeacher = teacherFilter.value;
@@ -133,6 +141,16 @@
                 alert('Funcionalidad de exportar reporte no implementada en esta simulación.');
             });
 
+            // Listen for changes from other tabs/windows
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'academicLoad') {
+                    getSharedAcademicLoad();
+                    window.renderChart();
+                    analyzeAndFeedback();
+                }
+            });
+
+            getSharedAcademicLoad();
             window.renderChart();
             analyzeAndFeedback();
         });
