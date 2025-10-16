@@ -159,6 +159,23 @@
                 '2025-12-01': { base: 50, tasks: ["Proyecto Final Física (25)", "Proyecto Final POO (25)"] },
             };
 
+            // --- Shared Data Functions ---
+            function getSharedAcademicLoad() {
+                const storedData = localStorage.getItem('academicLoad');
+                if (storedData) {
+                    return JSON.parse(storedData);
+                }
+                // If nothing is stored, initialize it
+                localStorage.setItem('academicLoad', JSON.stringify(academicLoad));
+                return academicLoad;
+            }
+
+            function setSharedAcademicLoad(data) {
+                localStorage.setItem('academicLoad', JSON.stringify(data));
+            }
+
+            academicLoad = getSharedAcademicLoad();
+
             // --- Utility Functions ---
             function getStartOfWeek(date) {
                 const d = new Date(date);
@@ -255,26 +272,20 @@
                 feedbackBox.innerHTML = feedbackHTML;
                 feedbackBox.className = `p-4 rounded-lg min-h-[120px] transition-colors border ${bgColor} ${borderColor}`;
 
-                // Temporarily update chart for visualization
-                const originalLoad = academicLoad[weekStart] ? academicLoad[weekStart].base : 0;
+                // Permanently update data and chart
                 if(academicLoad[weekStart]) {
                     academicLoad[weekStart].base = newTotalLoad;
+                    academicLoad[weekStart].tasks.push(`${taskName} (${newLoadValue})`);
                 } else {
-                    // Create a temporary entry for the chart if the week doesn't exist
-                    academicLoad[weekStart] = { base: newTotalLoad, tasks: ["(Nueva tarea simulada)"] };
+                    academicLoad[weekStart] = { base: newTotalLoad, tasks: [`${taskName} (${newLoadValue})`] };
                 }
-                
-                renderChart(weekStart);
 
-                // Revert after a delay so the original state is preserved for next analysis
-                setTimeout(() => {
-                    if (originalLoad > 0) {
-                        academicLoad[weekStart].base = originalLoad;
-                    } else {
-                        delete academicLoad[weekStart]; // Clean up temp entry
-                    }
-                    // renderChart(); // Optionally re-render to revert visual change
-                }, 5000); // Reverts data after 5s, but keeps the visual change until next submission
+                // Save the new state
+                setSharedAcademicLoad(academicLoad);
+
+                // Re-render the chart with the new permanent data
+                renderChart(weekStart);
+                alert('¡Tarea asignada con éxito! La carga académica ha sido actualizada para todos los perfiles.');
             }
 
             // --- Event Listeners ---
