@@ -31,13 +31,14 @@
     border-left: 4px solid #34d399;
 }
 
-.space-y-2 {
+.space-y-2{
     position: relative;
     margin: 20px 0 40px;
     width: 190px;
+    transform: translateY(-40px);
   }
-
-  .space-y-2 input {
+  
+  .space-y-2 input{
     background-color: transparent;
     border: 0;
     border-bottom: 2px #fff solid;
@@ -46,36 +47,51 @@
     padding: 15px 0;
     font-size: 18px;
     color: #fff;
-
+    margin-top: 10px;
     
   }
-
-  .space-y-2 input:focus,
-  .space-y-2 input:valid {
+  
+  .space-y-2 input:focus{
     outline: 0;
     border-bottom-color: lightblue;
   }
-
-  .space-y-2 label {
+  
+  /* Label base */
+  .space-y-2 label{
     position: absolute;
-    top: 15px;
+    top: 2px;
     left: 0;
     pointer-events: none;
   }
-
-  .space-y-2 label span {
+  
+  .space-y-2 label span{
     display: inline-block;
     font-size: 18px;
     min-width: 5px;
     color: #fff;
-    transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition:
+      transform 0.3s cubic-bezier(0.68,-0.55,0.265,1.55),
+      color 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);
   }
-
-  .space-y-2 input:focus + label span,
-  .space-y-2 input:valid + label span {
+  
+  /* Sube el label solo mientras hay foco */
+  .space-y-2 input:focus + label span{
     color: lightblue;
     transform: translateY(-30px);
   }
+  
+  /* Si hay valor, mantener arriba SIN animación */
+  .space-y-2 input.has-value + label span{
+    color: lightblue;
+    transform: translateY(-30px);
+    transition: none;     /* sin transición cuando ya tiene texto */
+  }
+  
+  /* Opcional: mantener el borde activo si hay valor */
+  .space-y-2 input.has-value{
+    border-bottom-color: lightblue;
+  }
+  
 
   .space-y-2 hidden {
     position: relative;

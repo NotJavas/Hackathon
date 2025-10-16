@@ -12,7 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const loginForm = document.getElementById('login-form');
 
             const nameInput = document.getElementById('name');
-            const emailInput = document.getElementById('email');
+            const emailInput = document.getElementById('email');0
+
+            const inputs = document.querySelectorAll('.space-y-2 input');
+
             const passwordInput = document.getElementById('password');
 
             const toastContainer = document.getElementById('toast-container');
@@ -36,19 +39,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 }, 3000);
             }
             
-                // Al perder el foco (click fuera), borrar contenido
-                emailInput.addEventListener('blur', () => {
-                emailInput.value = '';
-                // (Opcional) disparar 'input' para que otras lógicas reaccionen
-                emailInput.dispatchEvent(new Event('input', { bubbles: true }));
-                });    
+            inputs.forEach(input => {
+                const syncState = () => {
+                  if (input.value.trim() !== '') {
+                    input.classList.add('has-value');
+                  } else {
+                    input.classList.remove('has-value');
+                  }
+                };
+              
+                // Actualiza estado mientras escribe
+                input.addEventListener('input', syncState);
+              
+                // Al perder foco: solo “borra” si está vacío (efecto: vuelve el label abajo)
+                input.addEventListener('blur', () => {
+                  if (input.value.trim() === '') {
+                    input.value = '';           // redundante, pero deja claro el reset
+                    input.classList.remove('has-value');
+                  } else {
+                    input.classList.add('has-value'); // mantiene label arriba sin animación
+                  }
+                });
+              
+                // Estado inicial (por si llega con valor prellenado)
+                syncState();
+              });
+            
                 
-                passwordInput.addEventListener('blur', () => {
-                passwordInput.value = '';
-                // (Opcional) disparar 'input' para que otras lógicas reaccionen
-                passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
-                }); 
-
+                
             function toggleForm() {
                 isSignUp.value = !isSignUp.value;
 
