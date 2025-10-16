@@ -18,8 +18,6 @@ Funcionalidades Clave del Prototipo
 
 Panel de Profesor (TeacherPanel): ¡La joya de la corona! Una interfaz interactiva donde el profesor puede simular la asignación de una nueva tarea. Antes de publicarla, visualiza el impacto que tendrá en la carga semanal de sus alumnos, recibe alertas de riesgo de burnout y obtiene sugerencias para optimizar las fechas de entrega. Es una herramienta predictiva, no reactiva.
 
-Panel de Coordinador (CoordinatorPanel): Una vista macro para directores de carrera. Permite identificar patrones de sobrecarga a lo largo del semestre, detectar "cuellos de botella" y reestructurar los planes de estudio de forma estratégica y basada en datos.
-
 API Handler (APIHandler): El cerebro detrás de la simulación. Este módulo contiene la lógica para calcular la Puntuación de Carga Académica (PCA), procesando las tareas y generando las alertas.
 
 Componentes de UI (Bars, SideBar, TopBar): Módulos reutilizables que construyen una interfaz de usuario limpia, moderna y fácil de navegar.
@@ -47,7 +45,6 @@ Aquí tienes la versión corregida y detallada:
 │   │   ├── TopBar.html       # Componente de la barra superior.
 │   │   └── template.html     # (No utilizado) Plantilla base de HTML.
 │   ├── pages/
-│   │   ├── CoordinatorPanel.html # Vista para el coordinador.
 │   │   ├── TeacherPanel.html # Vista para el profesor.
 │   │   ├── landing.html      # Contenedor principal con la navegación y el iframe.
 │   │   └── login.html        # Página de inicio de sesión.
