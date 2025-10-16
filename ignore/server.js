@@ -343,6 +343,34 @@ app.get("/api/courses/:courseId/all-assignments", authMiddleware, async (req, re
 });
 
 /**
+ * @route GET /api/teacher/courses
+ * @description Devuelve la lista de cursos que pertenecen al profesor logueado (según Inscripciones/Cursos en la DB).
+ * @returns {Array<object>} 200 - Lista de cursos con sus IDs internos y google_course_id.
+ */
+app.get("/api/teacher/courses", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Asumimos que el usuario está autenticado como teacher (rol = 'teacher').
+    // Devolvemos todos los cursos en los que el profesor está inscrito (la app guarda la inscripción en sync)
+    const courses = await db.all(
+      `
+        SELECT DISTINCT C.id as id, C.google_course_id as googleCourseId, C.nombre_curso as name
+        FROM Cursos AS C
+        JOIN Inscripciones AS I ON C.id = I.curso_id
+        WHERE I.usuario_id = ?
+      `,
+      userId
+    );
+
+    res.json(courses);
+  } catch (error) {
+    console.error("Error al obtener cursos del profesor:", error);
+    res.status(500).json({ error: "No se pudieron obtener los cursos del profesor." });
+  }
+});
+
+/**
  * @route GET /api/sync/teacher
  * @description Sincroniza los datos de Classroom para el profesor logueado y los guarda/actualiza en la base de datos.
  * @returns {object} 200 - El JSON "crudo" de datos que se obtuvo de Google y se usó para la sincronización.
