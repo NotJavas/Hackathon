@@ -76,22 +76,63 @@
                 </div>
                 <div class="p-6">
                     <form id="login-form" class="space-y-4">
-                        <div id="name-field" class="space-y-2 hidden">
-                            <label for="name" class="text-gray-200">Nombre Completo</label>
-                            <input id="name" type="text" placeholder="John Doe" class="w-full bg-gray-800 border-gray-700 text-gray-100 placeholder:text-gray-500 rounded-md p-2">
+
+
+
+                        <div id="name-field" class="space-y-2 hidden w-80">
+                            <input id="name" type="text" required="">
+                            <label for="name" class="text-gray-200">
+                                <span style="transition-delay:0ms">N</span>
+                                <span style="transition-delay:50ms">o</span>
+                                <span style="transition-delay:100ms">m</span>
+                                <span style="transition-delay:150ms">b</span>
+                                <span style="transition-delay:200ms">r</span>
+                                <span style="transition-delay:250ms">e</span>
+                                <span style="transition-delay:300ms"> </span>
+                                <span style="transition-delay:350ms">y</span>
+                                <span style="transition-delay:400ms"> </span>
+                                <span style="transition-delay:450ms">A</span>
+                                <span style="transition-delay:500ms">p</span>
+                                <span style="transition-delay:550ms">e</span>
+                                <span style="transition-delay:600ms">l</span>
+                                <span style="transition-delay:650ms">l</span>
+                                <span style="transition-delay:700ms">i</span>
+                                <span style="transition-delay:750ms">d</span>
+                                <span style="transition-delay:800ms">o</span>
+                            </label>
                         </div>
+
+                        <div class="space-y-2 ">
+                            <input id="email" type="email" required = ""/>
+                            <label for="email" class="text-gray-200 w-100">
+                              <span style="transition-delay:0ms">E</span>
+                              <span style="transition-delay:50ms">m</span>
+                              <span style="transition-delay:100ms">a</span>
+                              <span style="transition-delay:150ms">i</span>
+                              <span style="transition-delay:200ms">l</span>
+                            </label>
+                          </div>
 
                         <div class="space-y-2">
-                            <label for="email" class="text-gray-200">Email</label>
-                            <input id="email" type="email" placeholder="estudiante@universidad.edu" class="w-full bg-gray-800 border-gray-700 text-gray-100 placeholder:text-gray-500 rounded-md p-2">
+                            <input id="password" type="password" required ="">
+                            <label for="password" class="text-gray-200">
+                                <span style="transition-delay:0ms">C</span>
+                                <span style="transition-delay:50ms">o</span>
+                                <span style="transition-delay:100ms">n</span>
+                                <span style="transition-delay:150ms">t</span>
+                                <span style="transition-delay:200ms">r</span>
+                                <span style="transition-delay:250ms">a</span>
+                                <span style="transition-delay:300ms">s</span>
+                                <span style="transition-delay:350ms">e</span>
+                                <span style="transition-delay:400ms">ñ</span>
+                                <span style="transition-delay:450ms">a</span>
+                            </label>
                         </div>
 
-                        <div class="space-y-2">
-                            <label for="password" class="text-gray-200">Contraseña</label>
-                            <input id="password" type="password" placeholder="••••••••" class="w-full bg-gray-800 border-gray-700 text-gray-100 placeholder:text-gray-500 rounded-md p-2">
-                        </div>
 
-                        <button type="submit" id="submit-button" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">
+                        <button type="submit" id="submit-button" class="block mx-auto cursor-pointer transition-all bg-blue-500 text-white px-44 py-2 rounded-lg
+                        border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+                        active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
                             Iniciar sesión
                         </button>
 
@@ -106,7 +147,9 @@
                             </div>
                         </div>
 
-                        <button type="button" id="switch-form-button" class="w-full border border-gray-700 text-gray-300 hover:bg-gray-800 font-bold py-2 px-4 rounded-md">
+                        <button type="button" id="switch-form-button" class="block mx-auto cursor-pointer transition-all bg-gray-500 text-white px-44 py-2 rounded-lg
+                        border-gray-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+                        active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
                             Crear una cuenta
                         </button>
                     </form>

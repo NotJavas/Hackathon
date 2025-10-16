@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const toastContainer = document.getElementById('toast-container');
 
+
             function showToast(message, type = 'info') {
                 const toast = document.createElement('div');
                 toast.className = `toast ${type}`;
@@ -34,6 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 300);
                 }, 3000);
             }
+            
+                // Al perder el foco (click fuera), borrar contenido
+                emailInput.addEventListener('blur', () => {
+                emailInput.value = '';
+                // (Opcional) disparar 'input' para que otras lógicas reaccionen
+                emailInput.dispatchEvent(new Event('input', { bubbles: true }));
+                });    
+                
+                passwordInput.addEventListener('blur', () => {
+                passwordInput.value = '';
+                // (Opcional) disparar 'input' para que otras lógicas reaccionen
+                passwordInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }); 
 
             function toggleForm() {
                 isSignUp.value = !isSignUp.value;
@@ -54,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     switchFormButton.textContent = 'Crear una cuenta';
                 }
             }
+
 
             switchFormButton.addEventListener('click', toggleForm);
 
